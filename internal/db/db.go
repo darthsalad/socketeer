@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/darthsalad/socketeer/internal/ws"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -53,7 +54,7 @@ func Connect(uriString string, dbName string, collName string) (*DB, error) {
 	}, nil
 }
 
-func (d *DB) Listen() error {
+func (d *DB) Listen(ws *ws.WebSocket) error {
 	coll := d.Coll
 	changeStream, err := coll.Watch(context.Background(), mongo.Pipeline{}, options.ChangeStream())
 	if err != nil {
@@ -97,12 +98,11 @@ func (d *DB) Listen() error {
 			fmt.Println("Update event")
 			for key, value := range updateResult.UpdateDescription.UpdatedFields {
 				fmt.Println("Key: ", key, "\t Value: ", value)
+				ws.DispatchUpdate(fmt.Sprintf("Key: %s  Value: %s", key, value))
 			}
 		} else if createResult.OperationType == "insert" {
 			fmt.Println("Create event")
-			for key, value := range createResult.FullDocument {
-				fmt.Println("Key: ", key, "\t Value: ", value)
-			}
+			ws.DispatchUpdate(fmt.Sprintf("Key: %s  Value: %s", "fullDocument", createResult.FullDocument))
 		}
 	}
 

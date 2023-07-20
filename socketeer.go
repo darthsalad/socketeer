@@ -1,17 +1,22 @@
 package socketeer
 
 import (
-	// "fmt"
+	"fmt"
 	"log"
 
 	"github.com/darthsalad/socketeer/internal/db"
-	// "github.com/darthsalad/socketeer/internal/ws"
+	"github.com/darthsalad/socketeer/internal/ws"
 )
 
 type Socketeer struct {
 	DB *db.DB
-	// WS *ws.WS
+	WS *ws.WebSocket
 }
+
+var (
+	Version = "0.1.0"
+	Build = "0"
+)
 
 func NewSocketeer(uriString string, dbName string, collName string) (*Socketeer, error) {
 	db, err := db.Connect(uriString, dbName, collName)
@@ -21,12 +26,16 @@ func NewSocketeer(uriString string, dbName string, collName string) (*Socketeer,
 
 	return &Socketeer{
 		DB: db,
-		// WS: ws,
+		WS: ws.NewWebSocket(),
 	}, nil
 }
 
 func (s *Socketeer) Start() error {
-	err := s.DB.Listen()
+	fmt.Printf("Socketeer started\nVersion: %s Build: %s \n", Version, Build)
+
+	go s.WS.Start()
+	
+	err := s.DB.Listen(s.WS)
 	if err != nil {
 		log.Fatal(err)
 		return err
@@ -36,11 +45,13 @@ func (s *Socketeer) Start() error {
 }
 
 func (s *Socketeer) Stop() error {
-	err := s.DB.Disconnect()
-	if err != nil {
-		log.Fatal(err)
-		return err
-	}
+	defer func(){
+		s.Stop()
+		fmt.Println("Socketeer stopped gracefully.")
+	}()
 
+	s.DB.Disconnect()
+	s.WS.Stop()
+	
 	return nil
 }
