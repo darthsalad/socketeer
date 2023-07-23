@@ -26,7 +26,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	s.Start()
+	fields := []string{"title", "text"}
+	url := "localhost:8080"
+	endpoint := "/listen"
+
+	s.Start(fields, url, endpoint)
 
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, os.Interrupt, os.Kill, syscall.SIGTERM)
