@@ -1,6 +1,11 @@
-# Socketeer - A Socket Server for MongoDB Events
-![Static Badge](https://img.shields.io/badge/Golang-Package-blue.svg?logo=go&color=%2300ADD8)
-![Static Badge](https://img.shields.io/badge/License-Apache%20License%202.0-green.svg)
+<div align="center">
+
+# Socketeer 
+## A Socket Server for MongoDB Events
+[![Static Badge](https://img.shields.io/badge/Golang-Package-blue.svg?logo=go&color=%2300ADD8)](https://pkg.go.dev/github.com/darthsalad/socketeer)
+[![Static Badge](https://badgen.net/github/release/DarthSalad/socketeer/latest-release?color=orange&icon=github)](https://github.com/DarthSalad/socketeer/releases)
+[![Static Badge](https://img.shields.io/badge/License-Apache%20License%202.0-green.svg)](/LICENSE)
+</div>
 
 
 `Socketeer` is a socket server that listens for `MongoDB` events and broadcasts them to connected clients. It is built with `Golang` and uses the `mongo-go-driver` for listening to database events. It uses `gorilla/websockets` package for the websocket server.
