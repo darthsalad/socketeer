@@ -90,4 +90,4 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 
 ## Author
 
-- [**Darthsalad**](https://github.com/DarthSalad)
+- [**Darthsalad**](https://github.com/darthsalad)
