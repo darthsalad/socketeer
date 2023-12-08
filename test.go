@@ -3,5 +3,6 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println("PISTON API Test")
+	str := "Hello World"
+	fmt.Println("PISTON API Test", str)
 }
